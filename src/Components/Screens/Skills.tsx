@@ -42,10 +42,8 @@ function Skill(props:skill){
 }
 
 
-function SkillsScreen(){    
-    let skillsEndPoint:string = "https://torre.co/api/genome/bios/jfernandorojasc/implicit-skills";    
+function SkillsScreen(){
     let history = useHistory();
-
     let onNextClick = ():void => {
         history.push('/type');
     }
