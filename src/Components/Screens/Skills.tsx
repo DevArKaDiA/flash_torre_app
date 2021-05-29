@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import { JsxElement } from "typescript";
 import Genoma from "../../interfaces/Genoma";
 import userState from "../../interfaces/userState";
+import Dialog from "../dialog";
 import iconsMap from "../iconsMap";
 import { addStackLenguaje } from "../store";
 
@@ -26,17 +27,20 @@ interface skill {
 function Skill(props:skill){
     const dispatch = useDispatch();
     return(        
-        <div onClick={() => dispatch(addStackLenguaje(props.name))} className="col-3">
-            <i className={'devicon-'+ props.ico}/>
+        <div onClick={() => dispatch(addStackLenguaje(props.name))} className="col-3">            
+            {
+                props.ico != undefined ? <i className={'devicon-'+ props.ico}></i> : <p>{props.name}</p>
+            }
         </div>
     );
 }
 
 
+function SkillsSection(){
+
+}
+
 function SkillsScreen(){
-
-
-
     let history = useHistory();
     let genome:Genoma = useSelector((state: any) => state.userReducer.genoma);
     
@@ -98,6 +102,7 @@ function SkillsScreen(){
                     <button onClick={onNextClick} className="col">Next</button>
                 </div>
             </div>
+            <Dialog/>
         </div>
     );
 }

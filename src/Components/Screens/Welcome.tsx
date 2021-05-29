@@ -8,7 +8,7 @@ import { AxiosResponse } from 'axios';
 import torreApi from '../http';
 import Genoma from '../../interfaces/Genoma';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import { setGenoma, setUser } from '../store';
+import { setGenoma, setStack, setUser } from '../store';
 
 
 
@@ -43,8 +43,9 @@ function WelcomeSearchConnected(props:any): JSX.Element{
 
     function hadleSubmit(e:any) {        
         e.preventDefault();
-        dispatch(setUser(Username)); 
-        if(!isGenomaSet){
+        dispatch(setUser(Username));
+        if(!isGenomaSet || genoma?.person.publicId != Username){
+            dispatch(setStack([]));
             getUserGnome(Username);        
         }else{
             history.push('/skills');

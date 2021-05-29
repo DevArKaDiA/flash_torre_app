@@ -16,7 +16,7 @@ const SET_LENGUAJES = "SET-LENGUAJES";
 
 
 const userstate: userState = {
-  stack: ['Hola']
+  stack: []
 };
 
 function userReducer(state = userstate, action: any){  
@@ -29,7 +29,7 @@ function userReducer(state = userstate, action: any){
       return { ...state, stack: state.stack.concat(action.payload)}
     case REMOVE_LENGUAJE:
       return {
-        ...state, 
+        ...state,
         stack: [
           ...state.stack.slice(0, action.payload),
           ...state.stack.slice(action.payload + 1)
@@ -37,7 +37,7 @@ function userReducer(state = userstate, action: any){
       }
     case SET_LENGUAJES:
       if(typeof(action.payload) == 'object'){
-        return { ...state, stack: action.payload}  
+        return { ...state, stack: action.payload}
       }
       return { ...state}
     default:
