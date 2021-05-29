@@ -13,6 +13,9 @@ import SkillsScreen from "./Components/Screens/Skills";
 
 import './App.scss';
 import DevType from "./Components/Screens/DevType";
+import Dialog from "./Components/dialog";
+import { connect } from "react-redux";
+import userState from "./interfaces/userState";
 
 
 class App extends React.Component{
@@ -29,6 +32,7 @@ class App extends React.Component{
         <Switch>
           <Route exact path="/">
             <WelcomeSearch/>
+            <Dialog/>
           </Route>
           <Route path="/skills">
             <SkillsScreen />

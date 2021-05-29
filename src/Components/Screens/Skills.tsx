@@ -1,49 +1,72 @@
 import axios from "axios";
-import { useState } from "react";
+import { MouseEventHandler, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { JsxElement } from "typescript";
+import Genoma from "../../interfaces/Genoma";
+import userState from "../../interfaces/userState";
+import iconsMap from "../iconsMap";
+import { addStackLenguaje } from "../store";
 
 
-let testSkills: Array<skill> = [
-    {
-        name: 'Python',
-        ico: 'python'
-    },
-    {
-        name: 'React',
-        ico: 'react'
-    },
-    {
-        name: 'React',
-        ico: 'react'
-    },
-    {
-        name: 'React',
-        ico: 'react'
-    },
-    {
-        name: 'React',
-        ico: 'react'
-    },
+// let skillsPlaceHolder: Array<skill> = [
+//     {
+//         name: 'Python',
+//         ico: 'python',
+//         onclick: () => {}
+//     }
     
-]
+// ]
 
 interface skill {
     name:string,
-    ico?:string
+    ico?:string    
 }
 
 function Skill(props:skill){
+    const dispatch = useDispatch();
     return(        
-        <div className="col-3">
-            <i className={'devicon-'+ props.ico + '-plain-wordmark'}/>
+        <div onClick={() => dispatch(addStackLenguaje(props.name))} className="col-3">
+            <i className={'devicon-'+ props.ico}/>
         </div>
     );
 }
 
 
 function SkillsScreen(){
+
+
+
     let history = useHistory();
+    let genome:Genoma = useSelector((state: any) => state.userReducer.genoma);
+    
+
+    if(genome == undefined){
+        history.push('/')
+    }
+    let strengths = genome.strengths.map((s) => {
+        let names = s.name.split(' ')        
+        names[0] = names[0].includes('+') ? names[0].replaceAll('+', 'plus'): names[0];
+        names[0] = names[0].includes('#') ? names[0].replaceAll('#', 'sharp'): names[0];
+        let posibleIcons = iconsMap.filter((i) => {            
+            if (i.name.includes(names[0].toLowerCase())){
+                return i
+            }            
+        });
+
+        posibleIcons = posibleIcons.sort((pi1, pi2) => pi1.name.length - pi2.name.length)
+        let skillobj: skill = {
+            name: s.name,
+            ico: posibleIcons[0] != undefined ? posibleIcons[0].name + '-' + posibleIcons[0].versions.font[0] : undefined,
+        }
+        return({'icon': Skill(skillobj)});
+    });
+    
+    
+    let onSelectLenguaje = (e:any):void =>{
+        
+    }
+
     let onNextClick = ():void => {
         history.push('/type');
     }
@@ -63,15 +86,15 @@ function SkillsScreen(){
                         
                         <div className="row">
                             {
-                                testSkills.map((s) => { 
-                                    return(<Skill name={s.name} ico={s.ico}/>);
+                                strengths.map((s) => { 
+                                    return(s.icon);
                                 })
                             }    
                         </div>
                     </div>
                 </div>
-                <div className="row">                    
-                    <button className="col">Back</button>
+                <div className="row">
+                    <button className="col" onClick={() => history.push('/')}>Back</button>
                     <button onClick={onNextClick} className="col">Next</button>
                 </div>
             </div>

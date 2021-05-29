@@ -1,113 +1,66 @@
 import logo from '../../img/logo192.png'
 
 import { useHistory } from 'react-router-dom'
+
 import React, { SyntheticEvent, useState } from 'react';
+
+import { AxiosResponse } from 'axios';
 import torreApi from '../http';
-
-interface Gnome{
-    "person": {
-        "professionalHeadline": String,
-        "completion": Number,
-        "showPhone": Boolean,
-        "created": Date,
-        "verified": Boolean,
-        "flags": {
-            "benefits": Boolean,
-            "canary": Boolean,
-            "enlauSource": Boolean,
-            "fake": Boolean,
-            "featureDiscovery": Boolean,
-            "firstSignalSent": Boolean,
-            "signalsOnboardingCompleted": Boolean,
-            "importingLinkedin": Boolean,
-            "onBoarded": Boolean,
-            "remoter": Boolean,
-            "signalsFeatureDiscovery": Boolean,
-            "importingLinkedinRecommendations": Boolean,
-            "contactsImported": Boolean,
-            "appContactsImported": Boolean,
-            "genomeCompletionAcknowledged": Boolean
-        },
-        "weight": Number
-        "locale": String,
-        "subjectId": Number,
-        "picture": String, // LINK
-        "hasEmail": Boolean,
-        "isTest": Boolean,
-        "name": String,
-        "links": Array<{
-            "id": String,
-            "name": String,
-            "address": String // LINK
-        }>,
-        "location": {
-            "name": String,
-            "shortName": String,
-            "country": String,
-            "latitude": Number,
-            "longitude": Number,
-            "timezone": String,
-            "timezoneOffSet": Number
-        },
-        "theme": String,
-        "id": String,
-        "pictureThumbnail": String,
-        "claimant": Boolean,
-        "summaryOfBio": String,
-        "weightGraph": String,
-        "publicId": String
-
-    },
-    "stats": object,
-    "strengths": object,
-    "interests": object,
-    "experiences": object,
-    "awards": object,
-    "jobs": object,
-    "projects": object,
-    "publications": object,
-    "education": object,
-    "opportunities": object,
-    "languages": object,
-    "personalityTraitsResults": object,
-    "professionalCultureGenomeResults": object,
-}
+import Genoma from '../../interfaces/Genoma';
+import { connect, useDispatch, useSelector } from 'react-redux';
+import { setGenoma, setUser } from '../store';
 
 
 
-function WelcomeSearch(){
-    let history = useHistory();
+function mapStateToProps(state:any){
+    console.log("mapStateToProps",state.userReducer.userid)
+    return { username: state.userReducer.userid };
+};
+
+function WelcomeSearchConnected(props:any): JSX.Element{
+    const history = useHistory();
+    const dispatch = useDispatch();    
+    let storeUsername = useSelector((state:any) => state.userReducer.userid);
+    let genoma : Genoma | undefined = useSelector((state:any) => state.userReducer.genoma);
+
+    let [isGenomaSet, setIsGenomaSet] = useState<Boolean>(genoma == undefined ? false : true);
     let [isCorrectUsername, setIsCorrectUsername] = useState<Boolean>(false);
-    let [Username, setUsername] = useState<String>('');
+    let [Username, setUsername] = useState<string>(props.username ? props.username : storeUsername);
 
     
 
-    function getUserGnome(userId : String): void {
-
-        
-
+    function getUserGnome(userId : string): void {
+        let gnome: Genoma;
         torreApi.get('bios/'+ userId).then((response) => {        
-            console.log(response);
+            gnome = response.data;            
+            dispatch(setGenoma(gnome));            
+            history.push('/skills');
         }).catch((err:any) => {
             console.log(err);
         });
 
     }
 
-    let hadleSubmit = (e:any) => {        
+    function hadleSubmit(e:any) {        
         e.preventDefault();
-        console.log(Username);
-        getUserGnome(Username);
-
-        //history.push('/skills');
+        dispatch(setUser(Username)); 
+        if(!isGenomaSet){
+            getUserGnome(Username);        
+        }else{
+            history.push('/skills');
+        }
+        
+        
+        
     }
     function onChangeUsername(e:React.FormEvent<HTMLInputElement>) {
         let regex: RegExp = /[.*+?^${}()|[\]\\]/g;
-        let username: string = e.currentTarget.value;
+        let username: string = e.currentTarget.value;        
         setUsername(username);
         //Check user
         if(!regex.test(username)){
             if(!isCorrectUsername){
+                
                 setIsCorrectUsername(true);                
             }
             //Store User on app State Redux
@@ -128,11 +81,12 @@ function WelcomeSearch(){
                     type="text" 
                     name="username" 
                     id="username" 
+                    defaultValue={Username}
                     onChange={(e) => onChangeUsername(e)}
                     />
                     <button 
                     onClick={(e) => hadleSubmit(e)}
-                    disabled={!isCorrectUsername}
+                    disabled={Username != undefined ? false : !isCorrectUsername}
                     >                        
                         Buscar
                     </button>
@@ -141,6 +95,8 @@ function WelcomeSearch(){
         </div>      
     );
 }
+
+const WelcomeSearch = connect(mapStateToProps)(WelcomeSearchConnected);
 
 export default WelcomeSearch;
 
