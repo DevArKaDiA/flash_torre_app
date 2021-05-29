@@ -28,11 +28,12 @@ function userReducer(state = userstate, action: any){
     case ADD_LENGUAJE:
       return { ...state, stack: state.stack.concat(action.payload)}
     case REMOVE_LENGUAJE:
+      let pos = state.stack.findIndex((e) => e == action.payload);
       return {
         ...state,
         stack: [
-          ...state.stack.slice(0, action.payload),
-          ...state.stack.slice(action.payload + 1)
+          ...state.stack.slice(0, pos),
+          ...state.stack.slice(pos + 1)
         ],        
       }
     case SET_LENGUAJES:

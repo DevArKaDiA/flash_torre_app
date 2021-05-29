@@ -7,7 +7,7 @@ import Genoma from "../../interfaces/Genoma";
 import userState from "../../interfaces/userState";
 import Dialog from "../dialog";
 import iconsMap from "../iconsMap";
-import { addStackLenguaje } from "../store";
+import { addStackLenguaje, removeStackLenguaje } from "../store";
 
 
 // let skillsPlaceHolder: Array<skill> = [
@@ -26,8 +26,15 @@ interface skill {
 
 function Skill(props:skill){
     const dispatch = useDispatch();
+    let stack = useSelector((state: any) => state.userReducer.stack);    
     return(        
-        <div onClick={() => dispatch(addStackLenguaje(props.name))} className="col-3">            
+        <div onClick={() => {
+            if(stack.includes(props.name)){
+                dispatch(removeStackLenguaje(props.name));    
+            }else{
+                dispatch(addStackLenguaje(props.name));
+            }            
+        }} className="col-3">            
             {
                 props.ico != undefined ? <i className={'devicon-'+ props.ico}></i> : <p>{props.name}</p>
             }
