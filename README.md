@@ -1,5 +1,24 @@
 # Torre Guided Search Engine App
 
+The idea of ​​this small third-party tower client was to generate a personalized and atomic search focused solely on developers involving (Type of work, time of work, skills and payment),
+
+It was possible to finish the general functionality, with the different states for the styles and the general state of the application using redux, there is still a long way to go to make it a usable functionality, This is a bit of what I can be as a programmer
+
+
+STACK:
+- Redux
+- ReactJs
+- NodeJS
+
+Missing functionalities:
+
+- An api-rest that will manage the searches and save them by user id which will allow repeating the searches by adding parameters
+- Implement all styles for each element
+- Debug some runtime errors, organize some interfaces etc.
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
