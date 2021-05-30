@@ -14,6 +14,8 @@ const ADD_LENGUAJE = 'ADD-LENGUAJE';
 const REMOVE_LENGUAJE = 'REMOVE-LENGUAJE';
 const SET_LENGUAJES = "SET-LENGUAJES";
 
+const SET_STACK = 'SET-STACK'
+
 
 const userstate: userState = {
   stack: []
@@ -41,6 +43,8 @@ function userReducer(state = userstate, action: any){
         return { ...state, stack: action.payload}
       }
       return { ...state}
+    case SET_STACK:      
+      return {...state, stackFocus: action.payload}
     default:
       return(state);
   }
@@ -65,6 +69,10 @@ export function removeStackLenguaje(lenguaje:string) : any {
 
 export function setStack(lenguajes:Array<string>) : any {
   return { type: SET_LENGUAJES, payload: lenguajes};
+}
+
+export function setStackFocus(key:string) : any {
+  return { type: SET_STACK, payload: key};
 }
 
 const store = configureStore({

@@ -59,6 +59,8 @@ function SkillsScreen(){
         let names = s.name.split(' ')        
         names[0] = names[0].includes('+') ? names[0].replaceAll('+', 'plus'): names[0];
         names[0] = names[0].includes('#') ? names[0].replaceAll('#', 'sharp'): names[0];
+        names[0] = names[0].includes('MSSQL') ? names[0].replaceAll('MSSQL', 'microsoftsqlserver'): names[0];
+        
         let posibleIcons = iconsMap.filter((i) => {            
             if (i.name.includes(names[0].toLowerCase())){
                 return i
