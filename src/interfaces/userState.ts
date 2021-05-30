@@ -5,4 +5,6 @@ export default interface userState{
     userid?: string,
     stack: Array<string>,
     stackFocus?: string
+    jobTime?:string
+    paymentAmount?: string
 }

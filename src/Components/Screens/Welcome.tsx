@@ -2,9 +2,9 @@ import logo from '../../img/logo192.png'
 
 import { useHistory } from 'react-router-dom'
 
-import React, { SyntheticEvent, useState } from 'react';
+import React, { useState } from 'react';
 
-import { AxiosResponse } from 'axios';
+// import { AxiosResponse } from 'axios';
 import torreApi from '../http';
 import Genoma from '../../interfaces/Genoma';
 import { connect, useDispatch, useSelector } from 'react-redux';
@@ -23,7 +23,7 @@ function WelcomeSearchConnected(props:any): JSX.Element{
     let storeUsername = useSelector((state:any) => state.userReducer.userid);
     let genoma : Genoma | undefined = useSelector((state:any) => state.userReducer.genoma);
 
-    let [isGenomaSet, setIsGenomaSet] = useState<Boolean>(genoma == undefined ? false : true);
+    let [isGenomaSet, setIsGenomaSet] = useState<Boolean>(genoma === undefined ? false : true);
     let [isCorrectUsername, setIsCorrectUsername] = useState<Boolean>(false);
     let [Username, setUsername] = useState<string>(props.username ? props.username : storeUsername);
 
@@ -44,7 +44,7 @@ function WelcomeSearchConnected(props:any): JSX.Element{
     function hadleSubmit(e:any) {        
         e.preventDefault();
         dispatch(setUser(Username));
-        if(!isGenomaSet || genoma?.person.publicId != Username){
+        if(!isGenomaSet || genoma?.person.publicId !== Username){
             dispatch(setStack([]));
             getUserGnome(Username);        
         }else{
@@ -87,7 +87,7 @@ function WelcomeSearchConnected(props:any): JSX.Element{
                     />
                     <button 
                     onClick={(e) => hadleSubmit(e)}
-                    disabled={Username != undefined ? false : !isCorrectUsername}
+                    disabled={Username !== undefined ? false : !isCorrectUsername}
                     >                        
                         Buscar
                     </button>

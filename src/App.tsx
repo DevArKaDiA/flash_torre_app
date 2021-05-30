@@ -16,6 +16,7 @@ import DevType from "./Components/Screens/DevType";
 import Dialog from "./Components/dialog";
 import { connect } from "react-redux";
 import userState from "./interfaces/userState";
+import JobTime from "./Components/Screens/JobTime";
 
 
 class App extends React.Component{
@@ -36,10 +37,13 @@ class App extends React.Component{
           </Route>
           <Route path="/skills">
             <SkillsScreen />
-          </Route>       
+          </Route>
           <Route path="/type">
             <DevType/>
-          </Route>            
+          </Route>
+          <Route path="/jobTime">
+            <JobTime/>
+          </Route>
         </Switch>        
       </Router>      
     );

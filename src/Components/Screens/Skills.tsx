@@ -21,26 +21,9 @@ import { addStackLenguaje, removeStackLenguaje } from "../store";
 
 interface skill {
     name:string,
-    ico?:string    
+    ico?:string,
 }
 
-function Skill(props:skill){
-    const dispatch = useDispatch();
-    let stack = useSelector((state: any) => state.userReducer.stack);    
-    return(        
-        <div onClick={() => {
-            if(stack.includes(props.name)){
-                dispatch(removeStackLenguaje(props.name));    
-            }else{
-                dispatch(addStackLenguaje(props.name));
-            }            
-        }} className="col-3">            
-            {
-                props.ico != undefined ? <i className={'devicon-'+ props.ico}></i> : <p>{props.name}</p>
-            }
-        </div>
-    );
-}
 
 
 function SkillsSection(){
@@ -50,7 +33,36 @@ function SkillsSection(){
 function SkillsScreen(){
     let history = useHistory();
     let genome:Genoma = useSelector((state: any) => state.userReducer.genoma);
+    let stack = useSelector((state: any) => state.userReducer.stack);    
+    let [skillsSelected, setSkillsSelected] = useState<string[]>(stack);
     
+    const dispatch = useDispatch();
+
+    function Skill(props:skill){    
+        let isSelected = skillsSelected.includes(props.name) ? 'bg-danger' : '';
+        let className = 'devicon-'+ props.ico;
+        
+        return(        
+            <div onClick={()=> onClickSkill(props)} className={'col-3 ' + isSelected}>            
+                {
+                    props.ico != undefined ? <i className={className}></i> : '' 
+                    
+                }
+                <p>{props.name}</p>
+            </div>
+        );
+    }
+    
+
+    let onClickSkill = (props:any) => {               
+        if(stack.includes(props.name)){
+            setSkillsSelected(skillsSelected.filter((i)=> i != props.name));
+            dispatch(removeStackLenguaje(props.name));    
+        }else{
+            setSkillsSelected(skillsSelected.concat(props.name));
+            dispatch(addStackLenguaje(props.name));
+        }            
+    }
 
     if(genome == undefined){
         history.push('/')
@@ -70,7 +82,7 @@ function SkillsScreen(){
         posibleIcons = posibleIcons.sort((pi1, pi2) => pi1.name.length - pi2.name.length)
         let skillobj: skill = {
             name: s.name,
-            ico: posibleIcons[0] != undefined ? posibleIcons[0].name + '-' + posibleIcons[0].versions.font[0] : undefined,
+            ico: posibleIcons[0] != undefined ? posibleIcons[0].name + '-' + posibleIcons[0].versions.font[0] : undefined            
         }
         return({'icon': Skill(skillobj)});
     });

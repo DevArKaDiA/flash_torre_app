@@ -1,5 +1,5 @@
 import React, { ChangeEventHandler, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Dialog from "../dialog";
 import { setStackFocus } from "../store";
@@ -7,7 +7,8 @@ import { setStackFocus } from "../store";
 function DevType(){
     const navigator = useHistory();
     const dispatch = useDispatch();
-    let [specialty, setSpecialty] = useState<string>('Full-Stack');    
+    let storeSpecialty = useSelector((state: any) => state.userReducer.stackFocus);
+    let [specialty, setSpecialty] = useState<string>(storeSpecialty == undefined ? 'Full-Stack': storeSpecialty);    
 
     const devSpecialty = [
         {
@@ -51,13 +52,16 @@ function DevType(){
                             <h2 className={specialty == "Back-End" ? 'col bg-danger': 'col'}>Back-End</h2>           
                             <h2 className={specialty == "Front-End" ? 'col bg-danger': 'col'}>Front-End</h2>           
                         </div>
-                        <input onChange={(e) => onRangeChange(e)} type="range" name="" id="" className="form-range" />
+                        <input onChange={(e) => onRangeChange(e)} type="range" defaultValue="50" className="form-range" />
                         <h2 className={specialty == "Full-Stack" ? 'col bg-danger': 'col'}>FullStack</h2>
                     </div>
                 </div>
                 <div className="row">                    
                     <button onClick={() => navigator.push('/skills')} className="col">Back</button>
-                    <button className="col">Next</button>
+                    <button onClick={() => {
+                        dispatch(setStackFocus(specialty));
+                        navigator.push('/jobTime');
+                    }} className="col">Next</button>
                 </div>
             </div>
             <Dialog/>

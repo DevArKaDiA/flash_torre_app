@@ -1,9 +1,5 @@
-import { AnyAction, configureStore } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit'
 
-
-
-import Genoma from '../interfaces/Genoma'
-import userAction from '../interfaces/userAction'
 import userState from '../interfaces/userState'
 
 
@@ -14,7 +10,9 @@ const ADD_LENGUAJE = 'ADD-LENGUAJE';
 const REMOVE_LENGUAJE = 'REMOVE-LENGUAJE';
 const SET_LENGUAJES = "SET-LENGUAJES";
 
-const SET_STACK = 'SET-STACK'
+const SET_STACK = 'SET-STACK';
+const SET_JOB_TIME = 'SET-JOB-TIME';
+const SET_PAYMENT_AMOUNT = "SET-PAYMENT-AMOUNT";
 
 
 const userstate: userState = {
@@ -30,7 +28,7 @@ function userReducer(state = userstate, action: any){
     case ADD_LENGUAJE:
       return { ...state, stack: state.stack.concat(action.payload)}
     case REMOVE_LENGUAJE:
-      let pos = state.stack.findIndex((e) => e == action.payload);
+      let pos = state.stack.findIndex((e) => e === action.payload);
       return {
         ...state,
         stack: [
@@ -45,6 +43,10 @@ function userReducer(state = userstate, action: any){
       return { ...state}
     case SET_STACK:      
       return {...state, stackFocus: action.payload}
+    case SET_JOB_TIME:
+      return {...state, jobTime: action.payload}
+    case SET_PAYMENT_AMOUNT:
+      return {...state, compensation: action.payload}
     default:
       return(state);
   }
@@ -75,6 +77,13 @@ export function setStackFocus(key:string) : any {
   return { type: SET_STACK, payload: key};
 }
 
+export function setJobTime(key:string) : any {
+  return { type: SET_JOB_TIME, payload: key};
+}
+
+export function setPaymentAmount(quantity:number) : any {
+  return { type: SET_PAYMENT_AMOUNT, payload: quantity};
+}
 const store = configureStore({
   reducer: {
     userReducer
@@ -82,7 +91,7 @@ const store = configureStore({
 })
 
 
-store.subscribe(() => {console.log(store.getState())})
+// store.subscribe(() => {console.log(store.getState())})
 // store.dispatch({ type: 'counter/incremented' })
 // store.dispatch({ type: 'counter/incremented' })
 // store.dispatch({ type: 'counter/set', payload: 10 })
